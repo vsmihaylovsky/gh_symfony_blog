@@ -1,0 +1,21 @@
+{
+  "name": "gh_symfony_blog",
+  "description": ". =",
+  "main": "index.js",
+  "authors": [
+    "vsmihaylovsky <vsmihaylovsky@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/vsmihaylovsky/gh_symfony_blog",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6"
+  }
+}
