@@ -1,0 +1,7 @@
+AppBundle\Entity\Comment:
+    comment_{1..100}:
+        rating: <numberBetween(1, 5)>
+        name: <name()>
+        email: <email()>
+        message_text: <paragraph()>
+        article: "@article_*"

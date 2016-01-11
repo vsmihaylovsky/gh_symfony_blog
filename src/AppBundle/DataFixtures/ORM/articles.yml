@@ -1,0 +1,6 @@
+AppBundle\Entity\Article:
+    article_{1..20}:
+        header: <text(100)>
+        slug: <text(100)>
+        content: <text()>
+        author: "@author_*"
