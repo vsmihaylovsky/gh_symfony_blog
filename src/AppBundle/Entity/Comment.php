@@ -9,10 +9,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="comment")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\CommentRepository")
  */
 class Comment
 {
@@ -46,7 +48,13 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $message_text;
+    private $messageText;
+
+    /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="integer")
+     */
+    private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
@@ -169,7 +177,7 @@ class Comment
      */
     public function setMessageText($messageText)
     {
-        $this->message_text = $messageText;
+        $this->messageText = $messageText;
 
         return $this;
     }
@@ -181,7 +189,31 @@ class Comment
      */
     public function getMessageText()
     {
-        return $this->message_text;
+        return $this->messageText;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param integer $createdAt
+     *
+     * @return Comment
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return integer
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 
     /**

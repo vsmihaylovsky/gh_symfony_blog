@@ -10,10 +10,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="article")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\ArticleRepository")
  */
 class Article
 {
@@ -35,6 +37,7 @@ class Article
     private $header;
 
     /**
+     * @Gedmo\Slug(fields={"header"}, updatable=true, separator="_")
      * @ORM\Column(type="string", length=100)
      */
     private $slug;
@@ -45,13 +48,25 @@ class Article
     private $content;
 
     /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="integer")
+     */
+    private $createdAt;
+
+    /**
+     * @Gedmo\Timestampable(on="change", field={"header", "content"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Author", inversedBy="articles")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tag", mappedBy="articles")
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="articles")
      */
     private $tags;
 
@@ -170,6 +185,54 @@ class Article
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param integer $createdAt
+     *
+     * @return Article
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return integer
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param integer $updatedAt
+     *
+     * @return Article
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return integer
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**

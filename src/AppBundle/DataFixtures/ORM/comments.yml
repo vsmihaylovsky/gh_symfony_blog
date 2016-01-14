@@ -3,5 +3,6 @@ AppBundle\Entity\Comment:
         rating: <numberBetween(1, 5)>
         name: <name()>
         email: <email()>
-        message_text: <paragraph()>
+        messageText: <paragraph()>
         article: "@article_*"
+        createdAt: <unixTime()>

@@ -10,10 +10,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="tag")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\TagRepository")
  */
 class Tag
 {
@@ -30,7 +32,13 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Article", inversedBy="tags")
+     * @Gedmo\Slug(fields={"name"}, updatable=true, separator="_")
+     * @ORM\Column(type="string", length=30)
+     */
+    private $slug;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Article", mappedBy="tags")
      * @ORM\JoinTable(name="articles_tags")
      */
     private $articles;
@@ -71,6 +79,30 @@ class Tag
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Tag
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}
+    <div class="navbar-text navbar-right"><a href="#" class="navbar-link">Administration</a></div>
+    <form class="navbar-form navbar-right" action="{{ path('search_articles') }}" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" name="q" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+    </form>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-8">
+            {% block content %}{% endblock %}
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Tag cloud</h1>
+                </div>
+                <div class="panel-body">
+                    {% for tag in side_bar_content.tag_cloud %}
+                        <a href="{{ path('show_tag_articles', {'slug': tag.0.slug}) }}" style="font-size: {{ tag.tag_weight }}%">{{ tag.0.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Most popular articles</h1>
+                </div>
+                <ul class="list-group">
+                    {% for most_popular_article in side_bar_content.most_popular_articles %}
+                        <li class="list-group-item">
+                            <a href="{{ path('show_article', {'slug': most_popular_article.slug}) }}">{{ most_popular_article.header }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Latest comments</h1>
+                </div>
+                <ul class="list-group">
+                    {% for latest_comment in side_bar_content.latest_comments %}
+                        <li class="list-group-item">
+                            <a href="{{ path('show_article', {'slug': latest_comment.article.slug}) }}">{{ latest_comment.messageText }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
