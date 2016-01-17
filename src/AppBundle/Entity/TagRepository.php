@@ -18,7 +18,7 @@ class TagRepository extends EntityRepository
     public function getTagCloud()
     {
         return $this->createQueryBuilder('t')
-            ->select('t, sum(a.id) as articles_count')
+            ->select('t, count(a.id) as articles_count')
             ->join('t.articles', 'a')
             ->groupBy('t')
             ->orderBy('t.name')

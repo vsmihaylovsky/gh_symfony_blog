@@ -71,7 +71,7 @@ class Article
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $comments;
 
