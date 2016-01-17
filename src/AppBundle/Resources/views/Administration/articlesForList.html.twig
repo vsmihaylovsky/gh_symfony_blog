@@ -1,10 +1,18 @@
 {% for article in articles %}
     <div class="panel panel-default blog-article">
         <div class="panel-heading">
+                {{ form_start(delete_forms[article.0.id], {attr: {onsubmit: 'return confirm("Delete record?");', style: 'float: right' }}) }}
+                {{ form_widget(delete_forms[article.0.id].submit, {label: ' ', attr: {class: 'glyphicon glyphicon-trash btn-link' }}) }}
+                {{ form_end(delete_forms[article.0.id]) }}
+                <div style="float: right">
+                    <a class="glyphicon glyphicon-pencil"
+                       href="{{ path('edit_article', {'slug': article.0.slug}) }}"></a>
+                </div>
             <h1 class="panel-title">
                 <a href="{{ path('show_article', {'slug': article.0.slug}) }}">{{ article.0.header }}</a>
             </h1>
-            by <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
+            by
+            <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
                 <span class="glyphicon glyphicon-time" aria-hidden="true"
                       style="margin-left: 0.5ch"></span>
             {{ article.0.createdAt|date("d.m.Y h:i") }}
@@ -15,7 +23,8 @@
         <div class="panel-footer">
             <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
             {% for tag in article.0.tags %}
-                <a href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+                <a
+                href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
             {% endfor %}
             <br>
             <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
@@ -26,9 +35,10 @@
     </div>
 {% endfor %}
 {% if nextPageUrl %}
-    <div class="articles-pagination" style="display: none">
+    <button type="button" class="btn btn-default btn-lg articles-pagination">
         <span class="next-page">
-            <a href="{{ nextPageUrl }}">&gt;</a>
+            <a href="{{ nextPageUrl }}"></a>
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Show more
         </span>
-    </div>
+    </button>
 {% endif %}

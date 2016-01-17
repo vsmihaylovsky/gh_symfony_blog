@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Blog;
 
+use AppBundle\Controller\ParentController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,16 +14,14 @@ use AppBundle\Form\Type\CommentType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 
-class BlogController extends Controller
+class BlogController extends ParentController
 {
-    private $articlesShowAtATime = 3;
-
     /**
      * @param Request $request
+     * @return array
      * @Route("/", name="homepage")
      * @Method("GET")
-     * @Template("AppBundle:Blog:articleList.html.twig")
-     * @return array
+     * @Template("AppBundle:Blog:articlesList.html.twig")
      */
     public function indexAction(Request $request)
     {
@@ -121,7 +119,7 @@ class BlogController extends Controller
      * @return array
      * @Route("/author/{slug}", name="show_author_articles")
      * @Method("GET")
-     * @Template("AppBundle:Blog:articleList.html.twig")
+     * @Template("AppBundle:Blog:articlesList.html.twig")
      */
     public function showAuthorArticlesAction(Request $request, $slug)
     {
@@ -164,7 +162,7 @@ class BlogController extends Controller
      * @return array
      * @Route("/tag/{slug}", name="show_tag_articles")
      * @Method("GET")
-     * @Template("AppBundle:Blog:articleList.html.twig")
+     * @Template("AppBundle:Blog:articlesList.html.twig")
      */
     public function showTagArticlesAction(Request $request, $slug)
     {
@@ -206,7 +204,7 @@ class BlogController extends Controller
      * @return array
      * @Route("/search/", name="search_articles")
      * @Method("GET")
-     * @Template("AppBundle:Blog:articleList.html.twig")
+     * @Template("AppBundle:Blog:articlesList.html.twig")
      */
     public function showSearchArticlesAction(Request $request)
     {
@@ -269,21 +267,4 @@ class BlogController extends Controller
 
         return $sideBarContent;
     }
-
-    /**
-     * @param $articlesCount
-     * @param $currentPage
-     * @return mixed
-     */
-    private function getNextPageNumber($articlesCount, $currentPage)
-    {
-        if ($articlesCount > ($this->articlesShowAtATime * $currentPage)) {
-            $nextPage = $currentPage + 1;
-        } else {
-            $nextPage = false;
-        }
-
-        return $nextPage;
-    }
-
 }

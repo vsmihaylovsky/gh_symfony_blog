@@ -21,22 +21,28 @@
     {{ parent() }}
 
     <script type="text/javascript">
+        var canLoad = true;
+
         function loadRows() {
-            var url = $('.pagination span a').attr('href');
+            var url = $('.articles-pagination .next-page a').attr('href');
             $.get(url, function (data) {
                 var content = $(data),
                         articlesList = content.closest('.blog-article'),
                         nextLink = content.find('.next-page');
                 $('.blog-body').append(articlesList);
                 if (nextLink.length) {
-                    $('.pagination').html(nextLink);
+                    $('.articles-pagination').html(nextLink);
                 } else {
-                    $('.pagination').remove();
+                    $('.articles-pagination').remove();
                 }
             });
+
+            canLoad = true;
         }
+
         $(window).scroll(function () {
-            if ($(window).scrollTop() == $(document).height() - $(window).height() && $('.pagination span a').length) {
+            if (canLoad && $(window).scrollTop() == $(document).height() - $(window).height() && $('.articles-pagination .next-page a').length) {
+                canLoad = false;
                 loadRows();
             }
         });

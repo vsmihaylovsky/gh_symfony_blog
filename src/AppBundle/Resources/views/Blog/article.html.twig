@@ -8,17 +8,22 @@
     <span class="glyphicon glyphicon-star" aria-hidden="true" style="margin-left: 0.5ch"></span>
     {{ article.comments_rating|round(2) }}
     <hr>
-    {{ article.0.content }}
+    {{ article.0.content|raw }}
     <hr>
     <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
     {% for tag in article.0.tags %}
-        <a href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+        <a
+        href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
     {% endfor %}
     <hr>
     <h1>Comments:</h1>
     <div class="panel panel-default">
         <div class="panel-body">
             {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+            {{ tinymce_init({
+                theme: {'simple':{'height': 300, plugins: ['link code'],}},
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"})
+            }}
             {{ form(form) }}
         </div>
     </div>
@@ -32,7 +37,7 @@
                 {{ comment.rating }}
             </div>
             <div class="panel-body">
-                {{ comment.messageText }}
+                {{ comment.messageText|raw }}
             </div>
         </div>
 

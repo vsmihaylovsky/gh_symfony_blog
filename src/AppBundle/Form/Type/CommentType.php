@@ -15,7 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class CommentType extends AbstractType
 {
@@ -33,7 +32,12 @@ class CommentType extends AbstractType
                     5 => 5],
                 'choices_as_values' => true,
             ])
-            ->add('messageText', TextareaType::class);
+            ->add('messageText', TextareaType::class,
+                [
+                    'attr' => [
+                        'class' => 'tinymce'
+                    ]
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
