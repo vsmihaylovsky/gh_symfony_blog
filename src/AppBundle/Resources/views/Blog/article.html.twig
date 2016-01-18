@@ -9,7 +9,7 @@
     {{ article.comments_rating|round(2) }}
     <hr>
     {% if article.0.imageName %}
-        <img class="img-responsive center-block" src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}" alt="image">
+        <img class="img-responsive center-block" src="{{ asset('/images/articles/' ~ article.0.imageName) | imagine_filter('article_image') }}" alt="image">
         <br>
     {% endif %}
     {{ article.0.content|raw }}
