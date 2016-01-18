@@ -107,7 +107,7 @@ class BlogController extends ParentController
         }
 
         return [
-            $comment->getArticle(),
+            'article' => $article,
             'form' => $form->createView(),
             'side_bar_content' => $this->getSideBarContent()
         ];

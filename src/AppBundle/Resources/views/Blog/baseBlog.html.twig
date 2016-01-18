@@ -24,7 +24,7 @@
                 </div>
                 <div class="panel-body">
                     {% for tag in side_bar_content.tag_cloud %}
-                        <a href="{{ path('show_tag_articles', {'slug': tag.0.slug}) }}" style="font-size: {{ tag.tag_weight }}%">{{ tag.0.name ~ tag.articles_count }}</a>{% if not loop.last %}, {% endif %}
+                        <a href="{{ path('show_tag_articles', {'slug': tag.0.slug}) }}" style="font-size: {{ tag.tag_weight }}%">{{ tag.0.name }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 </div>
             </div>

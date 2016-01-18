@@ -11,6 +11,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -33,29 +34,35 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 100)
      */
     private $header;
 
     /**
      * @Gedmo\Slug(fields={"header"}, updatable=true, separator="_")
      * @ORM\Column(type="string", length=100)
+     * @Assert\Length(max = 100)
      */
     private $slug;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(max = 10000)
      */
     private $content;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="integer")
+     * @Assert\DateTime()
      */
     private $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="change", field={"header", "content"})
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\DateTime()
      */
     private $updatedAt;
 

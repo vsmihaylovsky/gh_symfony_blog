@@ -11,6 +11,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -27,13 +28,16 @@ class Tag
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 50)
      */
     private $name;
 
     /**
      * @Gedmo\Slug(fields={"name"}, updatable=true, separator="_")
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
+     * @Assert\Length(max = 50)
      */
     private $slug;
 

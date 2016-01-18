@@ -10,6 +10,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -31,28 +32,38 @@ class Comment
     private $article_id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 100)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 50)
+     * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Range(min = 1, max = 5)
      */
     private $rating;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=1000)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 1000)
      */
     private $messageText;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="integer")
+     * @Assert\DateTime()
      */
     private $createdAt;
 
