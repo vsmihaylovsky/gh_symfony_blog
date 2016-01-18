@@ -72,3 +72,27 @@ stof_doctrine_extensions:
         default:
             sluggable: true
             timestampable: true
+
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        article_image:
+            uri_prefix:         /images/articles
+            upload_destination: %kernel.root_dir%/../web/images/articles
+
+            inject_on_load:     false
+            delete_on_update:   true
+            delete_on_remove:   true
+
+liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
+    filter_sets:
+        cache: ~
+        article_image:
+            quality: 75
+            filters:
+                thumbnail: { size: [800, 450], mode: outbound }

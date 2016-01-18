@@ -12,11 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ArticleRepository")
+ * @Vich\Uploadable
  */
 class Article
 {
@@ -40,6 +43,25 @@ class Article
     private $header;
 
     /**
+     * @Vich\UploadableField(mapping="article_image", fileNameProperty="imageName")
+     *
+     * @Assert\File(maxSize="6000000",
+     *     mimeTypes={
+     *     "image/jpeg",
+     *     "image/jpg",
+     *     "image/png"})
+     *
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $imageName;
+
+    /**
      * @Gedmo\Slug(fields={"header"}, updatable=true, separator="_")
      * @ORM\Column(type="string", length=100)
      * @Assert\Length(max = 100)
@@ -55,14 +77,12 @@ class Article
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="integer")
-     * @Assert\DateTime()
      */
     private $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="change", field={"header", "content"})
      * @ORM\Column(type="integer", nullable=true)
-     * @Assert\DateTime()
      */
     private $updatedAt;
 
@@ -86,6 +106,26 @@ class Article
     {
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     */
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        if ($image) {
+            $this->updatedAt = time();
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
     }
 
     /**
@@ -144,6 +184,30 @@ class Article
     public function getHeader()
     {
         return $this->header;
+    }
+
+    /**
+     * Set imageName
+     *
+     * @param string $imageName
+     *
+     * @return Article
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageName
+     *
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
     }
 
     /**

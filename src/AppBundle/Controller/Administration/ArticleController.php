@@ -62,7 +62,7 @@ class ArticleController extends ParentAdministrationController
         ])
             ->add('save', SubmitType::class, ['label' => 'Update']);
 
-        return ['form' => $form->createView()];
+        return ['form' => $form->createView(), 'article' => $article];
     }
 
     /**
