@@ -31,11 +31,6 @@ class Article
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $author_id;
-
-    /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Length(max = 100)
@@ -136,30 +131,6 @@ class Article
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set authorId
-     *
-     * @param integer $authorId
-     *
-     * @return Article
-     */
-    public function setAuthorId($authorId)
-    {
-        $this->author_id = $authorId;
-
-        return $this;
-    }
-
-    /**
-     * Get authorId
-     *
-     * @return integer
-     */
-    public function getAuthorId()
-    {
-        return $this->author_id;
     }
 
     /**

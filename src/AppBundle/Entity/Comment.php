@@ -27,11 +27,6 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $article_id;
-
-    /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Length(max = 100)
@@ -81,30 +76,6 @@ class Comment
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set articleId
-     *
-     * @param integer $articleId
-     *
-     * @return Comment
-     */
-    public function setArticleId($articleId)
-    {
-        $this->article_id = $articleId;
-
-        return $this;
-    }
-
-    /**
-     * Get articleId
-     *
-     * @return integer
-     */
-    public function getArticleId()
-    {
-        return $this->article_id;
     }
 
     /**

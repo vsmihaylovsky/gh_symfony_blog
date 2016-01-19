@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if article is defined and article.imageName %}
-        <img class="img-responsive center-block" src={{ asset('/images/articles/' ~ article.imageName) | imagine_filter('article_image') }} alt="image">
+        <img class="img-responsive center-block" src={{ vich_uploader_asset(article, 'imageFile') | imagine_filter('article_image') }} alt="image">
         <br>
     {% endif %}
     {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
