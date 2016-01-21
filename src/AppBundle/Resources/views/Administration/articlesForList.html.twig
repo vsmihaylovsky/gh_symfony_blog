@@ -16,6 +16,11 @@
                 <span class="glyphicon glyphicon-time" aria-hidden="true"
                       style="margin-left: 0.5ch"></span>
             {{ article.0.createdAt|date("d.m.Y H:i") }}
+            <span class="glyphicon glyphicon-comment" aria-hidden="true" style="margin-left: 0.5ch"></span>
+            {{ article.comments_count }}
+            <div class="rating-container rating-gly-star" data-content="">
+                <div class="rating-stars" style="width: {{ article.comments_rating * 20 }}%" data-content=""></div>
+            </div>
         </div>
         <div class="panel-body">
             {% if article.0.imageName %}
@@ -30,11 +35,6 @@
                 <a
                 href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
             {% endfor %}
-            <br>
-            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-            {{ article.comments_count }}
-            <span class="glyphicon glyphicon-star" aria-hidden="true" style="margin-left: 0.5ch"></span>
-            {{ article.comments_rating|round(2) }}
         </div>
     </div>
 {% endfor %}

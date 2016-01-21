@@ -1,12 +1,13 @@
 {% extends 'AppBundle:Blog:baseBlog.html.twig' %}
-
 {% block content %}
     <h1>{{ article.0.header }}</h1>
     by <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
     <span class="glyphicon glyphicon-time" aria-hidden="true" style="margin-left: 0.5ch"></span>
     {{ article.0.createdAt|date("d.m.Y H:i") }}
-    <span class="glyphicon glyphicon-star" aria-hidden="true" style="margin-left: 0.5ch"></span>
-    {{ article.comments_rating|round(2) }}
+    <br>
+    <div class="rating-container rating-xs rating-gly-star" data-content="">
+        <div class="rating-stars" style="width: {{ article.comments_rating * 20 }}%" data-content=""></div>
+    </div>
     <hr>
     {% if article.0.imageName %}
         <img class="img-responsive center-block" src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}" alt="image">
@@ -37,13 +38,21 @@
                 <h1 class="panel-title">{{ comment.name }}</h1>
                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
                 {{ comment.createdAt|date("d.m.Y h:i") }}
-                <span class="glyphicon glyphicon-star" aria-hidden="true" style="margin-left: 0.5ch"></span>
-                {{ comment.rating }}
+                <div class="rating-container rating-gly-star" data-content="">
+                    <div class="rating-stars" style="width: {{ comment.rating * 20 }}%" data-content=""></div>
+                </div>
+
             </div>
             <div class="panel-body">
                 {{ comment.messageText|raw }}
             </div>
         </div>
-
     {% endfor %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+//        $("#comment_rating").rating({min:0, max:5, step:1});
+    </script>
 {% endblock %}

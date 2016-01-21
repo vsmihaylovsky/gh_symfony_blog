@@ -22,7 +22,8 @@ gulp.task('fonts', function () {
 gulp.task('lib-js', function() {
     return gulp.src([
             'bower_components/jquery/dist/jquery.js',
-            'bower_components/bootstrap/dist/js/bootstrap.js'
+            'bower_components/bootstrap/dist/js/bootstrap.js',
+            'bower_components/bootstrap-star-rating/js/star-rating.js'
         ])
         .pipe(concatJs('app.js'))
         .pipe(minifyJs())

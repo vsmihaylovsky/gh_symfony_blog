@@ -13,25 +13,27 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class CommentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Name'
+                ]])
             ->add('email', EmailType::class)
-            ->add('rating', ChoiceType::class, [
-                'choices' => [
-                    1 => 1,
-                    2 => 2,
-                    3 => 3,
-                    4 => 4,
-                    5 => 5],
-                'choices_as_values' => true,
-            ])
+            ->add('rating', NumberType::class, [
+                'attr' => [
+                    'class' => 'rating',
+                    'data-min' => 0,
+                    'data-max' => 5,
+                    'data-step' => 1,
+                    'data-show-clear' => 'false'
+                ]])
             ->add('messageText', TextareaType::class,
                 [
                     'attr' => [
