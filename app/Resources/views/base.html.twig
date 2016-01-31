@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Blog{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}"/>
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{ path('homepage') }}">Blog</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                {% block navbar %}{% endblock %}
+            </div>
+        </div>
+    </nav>
+    {% block body %}{% endblock %}
+    <div class="row">
+        <div class="col-md-12">
+            <hr>
+            GeekHub, Advanced PHP 2015, Symfony
+            <br>
+            Blog by Vadim Myhaylovsky
+            <hr>
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+{% endblock %}
+</body>
+</html>

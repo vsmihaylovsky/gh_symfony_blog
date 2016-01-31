@@ -1,0 +1,50 @@
+{% extends 'AppBundle:Blog:baseBlog.html.twig' %}
+
+{% block content %}
+    {% if articles_description is defined %}
+        {% if articles_description.type == 1 %}
+            {% set description = 'Articles for author: ' ~ articles_description.text %}
+        {% elseif articles_description.type == 2 %}
+            {% set description = 'Articles for tag: ' ~ articles_description.text %}
+        {% elseif articles_description.type == 3 %}
+            {% set description = 'Search for text in article title: ' ~ articles_description.text %}
+        {% else %}
+            {% set description = articles_description.text %}
+        {% endif %}
+
+        <h1>{{ description }}</h1>
+        <hr>
+    {% endif %}
+    {% include 'AppBundle:Blog:articlesForList.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var canLoad = true;
+
+        function loadRows() {
+            var url = $('.articles-pagination .next-page a').attr('href');
+            $.get(url, function (data) {
+                var content = $(data),
+                        articlesList = content.closest('.blog-article'),
+                        nextLink = content.find('.next-page');
+                $('.blog-body').append(articlesList);
+                if (nextLink.length) {
+                    $('.articles-pagination').html(nextLink);
+                } else {
+                    $('.articles-pagination').remove();
+                }
+            });
+
+            canLoad = true;
+        }
+
+        $(window).scroll(function () {
+            if (canLoad && $(window).scrollTop() == $(document).height() - $(window).height() && $('.articles-pagination .next-page a').length) {
+                canLoad = false;
+                loadRows();
+            }
+        });
+    </script>
+{% endblock %}

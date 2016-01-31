@@ -1,0 +1,58 @@
+{% extends 'AppBundle:Blog:baseBlog.html.twig' %}
+{% block content %}
+    <h1>{{ article.0.header }}</h1>
+    by <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
+    <span class="glyphicon glyphicon-time" aria-hidden="true" style="margin-left: 0.5ch"></span>
+    {{ article.0.createdAt|date("d.m.Y H:i") }}
+    <br>
+    <div class="rating-container rating-xs rating-gly-star" data-content="">
+        <div class="rating-stars" style="width: {{ article.comments_rating * 20 }}%" data-content=""></div>
+    </div>
+    <hr>
+    {% if article.0.imageName %}
+        <img class="img-responsive center-block" src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}" alt="image">
+        <br>
+    {% endif %}
+    {{ article.0.content|raw }}
+    <hr>
+    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+    {% for tag in article.0.tags %}
+        <a
+        href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+    <hr>
+    <h1>Comments:</h1>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+            {{ tinymce_init({
+                theme: {'simple':{'height': 200, plugins: ['link code'],}},
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"})
+            }}
+            {{ form(form) }}
+        </div>
+    </div>
+    {% for comment in article.0.comments %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">{{ comment.name }}</h1>
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                {{ comment.createdAt|date("d.m.Y h:i") }}
+                <div class="rating-container rating-gly-star" data-content="">
+                    <div class="rating-stars" style="width: {{ comment.rating * 20 }}%" data-content=""></div>
+                </div>
+
+            </div>
+            <div class="panel-body">
+                {{ comment.messageText|raw }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+//        $("#comment_rating").rating({min:0, max:5, step:1});
+    </script>
+{% endblock %}

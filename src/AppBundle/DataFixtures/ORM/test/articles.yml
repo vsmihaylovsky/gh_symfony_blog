@@ -1,0 +1,7 @@
+AppBundle\Entity\Article:
+    article_{1..4}:
+        author: "@author_*"
+        header: <text(100)>
+        content: <text(3000)>
+        tags: "1x @tag_*"
+        createdAt: <unixTime()>
