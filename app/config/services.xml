@@ -4,6 +4,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="most.popular.articles.count">5</parameter>
+        <parameter key="latest.comments.count">5</parameter>
+    </parameters>
+
     <services>
         <service id="app.pagination_service" class="AppBundle\Services\PaginationService">
             <argument>%articles_show_at_a_time%</argument>
@@ -12,6 +17,15 @@
         <service id="app.delete_form_service" class="AppBundle\Services\DeleteFormService">
             <argument type="service" id="form.factory"/>
             <argument type="service" id="router"/>
+        </service>
+
+        <service id="app.twig_extension"
+                 class="AppBundle\Twig\AppExtension"
+                 public="false">
+            <tag name="twig.extension"/>
+            <argument type="service" id="doctrine"/>
+            <argument>%most.popular.articles.count%</argument>
+            <argument>%latest.comments.count%</argument>
         </service>
     </services>
 </container>

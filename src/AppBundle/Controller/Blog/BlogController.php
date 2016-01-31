@@ -49,7 +49,6 @@ class BlogController extends Controller
 
         return [
             'articles' => $articles,
-            'side_bar_content' => $this->getSideBarContent(),
             'nextPageUrl' => $nextPageUrl
         ];
     }
@@ -73,7 +72,10 @@ class BlogController extends Controller
         ])
             ->add('save', SubmitType::class, ['label' => 'Add comment']);
 
-        return ['article' => $article, 'form' => $form->createView(), 'side_bar_content' => $this->getSideBarContent()];
+        return [
+            'article' => $article,
+            'form' => $form->createView()
+        ];
     }
 
     /**
@@ -109,7 +111,6 @@ class BlogController extends Controller
         return [
             'article' => $article,
             'form' => $form->createView(),
-            'side_bar_content' => $this->getSideBarContent()
         ];
     }
 
@@ -151,7 +152,6 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 1, 'text' => $author->getName()],
-            'side_bar_content' => $this->getSideBarContent(),
             'nextPageUrl' => $nextPageUrl
         ];
     }
@@ -194,7 +194,6 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 2, 'text' => $tag->getName()],
-            'side_bar_content' => $this->getSideBarContent(),
             'nextPageUrl' => $nextPageUrl
         ];
     }
@@ -234,37 +233,7 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 3, 'text' => $search_string],
-            'side_bar_content' => $this->getSideBarContent(),
             'nextPageUrl' => $nextPageUrl
         ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getSideBarContent()
-    {
-        $sideBarContent = [];
-
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Tag');
-        $sideBarContent['tag_cloud'] = $repository->getTagCloud();
-
-        $tag_weights = array_map(function ($tag) {
-            return $tag['articles_count'];
-        }, $sideBarContent['tag_cloud']);
-        $t_min = min($tag_weights);
-        $t_max = max($tag_weights);
-        $f_max = 2;
-        foreach ($sideBarContent['tag_cloud'] as &$tag) {
-            $tag['tag_weight'] = 65 * (1 + (($f_max * ($tag['articles_count'] - $t_min)) / ($t_max - $t_min)));
-        }
-
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $sideBarContent['most_popular_articles'] = $repository->findMostPopularArticles(5);
-
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Comment');
-        $sideBarContent['latest_comments'] = $repository->findLatestComments(5);
-
-        return $sideBarContent;
     }
 }
