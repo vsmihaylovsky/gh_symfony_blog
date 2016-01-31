@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Blog;
 
-use AppBundle\Controller\ParentController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,7 +14,7 @@ use AppBundle\Form\Type\CommentType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 
-class BlogController extends ParentController
+class BlogController extends Controller
 {
     /**
      * @param Request $request
@@ -30,9 +30,9 @@ class BlogController extends ParentController
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
         $articlesCount = $repository->findAllArticlesCount();
 
-        $nextPage = $this->getNextPageNumber($articlesCount, $currentPage);
+        $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findAllArticles($currentPage, $this->articlesShowAtATime);
+        $articles = $repository->findAllArticles($currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
             $nextPageUrl = $this->generateUrl('homepage', ['page' => $nextPage]);
@@ -128,9 +128,9 @@ class BlogController extends ParentController
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
         $articlesCount = $repository->findAllAuthorArticlesCount($slug);
 
-        $nextPage = $this->getNextPageNumber($articlesCount, $currentPage);
+        $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findAllAuthorArticles($slug, $currentPage, $this->articlesShowAtATime);
+        $articles = $repository->findAllAuthorArticles($slug, $currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
             $nextPageUrl = $this->generateUrl('show_author_articles', ['slug' => $slug, 'page' => $nextPage]);
@@ -171,9 +171,9 @@ class BlogController extends ParentController
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
         $articlesCount = $repository->findAllTagArticlesCount($slug);
 
-        $nextPage = $this->getNextPageNumber($articlesCount, $currentPage);
+        $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findAllTagArticles($slug, $currentPage, $this->articlesShowAtATime);
+        $articles = $repository->findAllTagArticles($slug, $currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
             $nextPageUrl = $this->generateUrl('show_tag_articles', ['slug' => $slug, 'page' => $nextPage]);
@@ -214,9 +214,9 @@ class BlogController extends ParentController
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
         $articlesCount = $repository->findSearchedArticlesCount($search_string);
 
-        $nextPage = $this->getNextPageNumber($articlesCount, $currentPage);
+        $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findSearchedArticles($search_string, $currentPage, $this->articlesShowAtATime);
+        $articles = $repository->findSearchedArticles($search_string, $currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
             $nextPageUrl = $this->generateUrl('search_articles', ['q' => $search_string, 'page' => $nextPage]);
