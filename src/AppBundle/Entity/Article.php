@@ -10,7 +10,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -57,7 +56,6 @@ class Article
     private $imageName;
 
     /**
-     * @Gedmo\Slug(fields={"header"}, updatable=true, separator="_")
      * @ORM\Column(type="string", length=100)
      * @Assert\Length(max = 100)
      */
@@ -70,13 +68,11 @@ class Article
     private $content;
 
     /**
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="integer")
      */
     private $createdAt;
 
     /**
-     * @Gedmo\Timestampable(on="change", field={"header", "content"})
      * @ORM\Column(type="integer", nullable=true)
      */
     private $updatedAt;

@@ -9,7 +9,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -56,7 +55,6 @@ class Comment
     private $messageText;
 
     /**
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="integer")
      * @Assert\DateTime()
      */

@@ -66,13 +66,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-stof_doctrine_extensions:
-    default_locale: en_US
-    orm:
-        default:
-            sluggable: true
-            timestampable: true
-
 vich_uploader:
     db_driver: orm
 
