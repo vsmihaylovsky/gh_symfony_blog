@@ -11,7 +11,9 @@ read item
 case "$item" in
 
 1)
-composer install
+curl -sS https://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
+php bin/composer install
+rm bin/composer
 npm install
 ./node_modules/.bin/bower install
 ./node_modules/.bin/gulp
@@ -34,7 +36,7 @@ php app/console doctrine:generate:entities --no-backup AppBundle
 ;;
 
 5)
-php phpunit -c app
+php bin/phpunit -c app
 ;;
 
 6)
