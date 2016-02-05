@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller\Administration;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @Route("/administration/article")
  */
-class ArticleController extends ParentAdministrationController
+class ArticleController extends Controller
 {
     /**
      * @return array
@@ -138,7 +139,7 @@ class ArticleController extends ParentAdministrationController
      */
     public function deleteAction(Request $request, $slug)
     {
-        $form = $this->createArticleDeleteForm($slug);
+        $form = $this->get('app.delete_form_service')->createArticleDeleteForm($slug);
 
         $form->handleRequest($request);
 

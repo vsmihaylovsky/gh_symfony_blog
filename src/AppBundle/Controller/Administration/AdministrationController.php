@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller\Administration;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -18,7 +19,7 @@ use AppBundle\Entity\Article;
 /**
  * @Route("/administration")
  */
-class AdministrationController extends ParentAdministrationController
+class AdministrationController extends Controller
 {
     /**
      * @param Request $request
@@ -34,9 +35,9 @@ class AdministrationController extends ParentAdministrationController
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
         $articlesCount = $repository->findAllArticlesCount();
 
-        $nextPage = $this->getNextPageNumber($articlesCount, $currentPage);
+        $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findAllArticles($currentPage, $this->articlesShowAtATime);
+        $articles = $repository->findAllArticles($currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
             $nextPageUrl = $this->generateUrl('administration_homepage', ['page' => $nextPage]);
@@ -44,7 +45,7 @@ class AdministrationController extends ParentAdministrationController
             $nextPageUrl = false;
         }
 
-        $delete_forms = $this->getArticlesDeleteForms($articles);
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
 
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Administration:articlesForList.html.twig',
@@ -54,19 +55,5 @@ class AdministrationController extends ParentAdministrationController
         }
 
         return ['articles' => $articles, 'delete_forms' => $delete_forms, 'nextPageUrl' => $nextPageUrl];
-    }
-
-    /**
-     * @param $articles
-     * @return array
-     */
-    private function getArticlesDeleteForms($articles) {
-        $delete_forms = [];
-        /** @var Article $article */
-        foreach ($articles as $article) {
-            $delete_forms[$article[0]->getId()] = $this->createArticleDeleteForm($article[0]->getSlug())->createView();
-        }
-
-        return $delete_forms;
     }
 }
