@@ -15,7 +15,7 @@ class ArticleRepository extends EntityRepository
 {
     /**
      * @param $slug
-     * @return Article
+     * @return array
      */
     public function findArticleBySlug($slug)
     {
@@ -29,7 +29,7 @@ class ArticleRepository extends EntityRepository
             ->orderBy('c.createdAt', 'DESC')
             ->where("a.slug = '$slug'")
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 
     /**

@@ -56,7 +56,7 @@ class BlogController extends Controller
     /**
      * @param $slug
      * @return array
-     * @Route("/{slug}", name="show_article")
+     * @Route("/article/{slug}", name="show_article")
      * @Method("GET")
      * @Template("AppBundle:Blog:article.html.twig")
      */
@@ -64,6 +64,10 @@ class BlogController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
         $article = $repository->findArticleBySlug($slug);
+
+        if (!$article) {
+            return $this->redirectToRoute('homepage');
+        }
 
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment, [
@@ -82,7 +86,7 @@ class BlogController extends Controller
      * @param Request $request
      * @param $slug
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Route("/{slug}", name="add_comment")
+     * @Route("/article/{slug}", name="add_comment")
      * @Method("POST")
      * @Template("AppBundle:Blog:article.html.twig")
      */
@@ -151,7 +155,7 @@ class BlogController extends Controller
 
         return [
             'articles' => $articles,
-            'articles_description' => ['type' => 1, 'text' => $author->getName()],
+            'articles_description' => ['type' => 1, 'text' => $author ? $author->getName() : null],
             'nextPageUrl' => $nextPageUrl
         ];
     }
@@ -193,7 +197,7 @@ class BlogController extends Controller
 
         return [
             'articles' => $articles,
-            'articles_description' => ['type' => 2, 'text' => $tag->getName()],
+            'articles_description' => ['type' => 2, 'text' => $tag ? $tag->getName() : null],
             'nextPageUrl' => $nextPageUrl
         ];
     }
