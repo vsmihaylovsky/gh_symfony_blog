@@ -11,12 +11,16 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="blog_users")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="username", message="Username already taken")
  */
 class User implements UserInterface, \Serializable
 {
@@ -28,9 +32,9 @@ class User implements UserInterface, \Serializable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
-     * @Assert\Length(max = 100)
+     * @Assert\Length(max = 255)
      */
     private $username;
 
@@ -60,8 +64,8 @@ class User implements UserInterface, \Serializable
 
     /**
      * @Gedmo\Slug(fields={"username"}, updatable=true, separator="_")
-     * @ORM\Column(type="string", length=100, unique=true)
-     * @Assert\Length(max = 100)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Length(max = 255)
      */
     private $slug;
 
@@ -69,6 +73,12 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="Article", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $articles;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max = 4096)
+     */
+    private $plainPassword;
 
     public function __construct()
     {
@@ -127,6 +137,22 @@ class User implements UserInterface, \Serializable
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
     }
 
     /**

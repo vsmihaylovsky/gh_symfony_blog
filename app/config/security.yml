@@ -9,7 +9,6 @@ security:
         db_provider:
             entity:
                 class: AppBundle:User
-                property: username
 
     firewalls:
         dev:
