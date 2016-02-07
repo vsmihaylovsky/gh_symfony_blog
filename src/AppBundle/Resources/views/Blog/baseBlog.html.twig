@@ -2,7 +2,13 @@
 
 {% block navbar %}
     {% if is_granted('ROLE_ADMIN') %}
-        <div class="navbar-text navbar-left"><a href="{{ path('administration_homepage') }}" class="navbar-link">Administration</a>
+        <div class="navbar-text navbar-left">
+            <a href="{{ path('administration_homepage') }}" class="navbar-link">Administration</a>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_USER') %}
+        <div class="navbar-text navbar-left">
+            <a href="{{ path('show_user_articles', {'slug': app.user.slug}) }}" class="navbar-link">{{ app.user.username }}</a>
         </div>
     {% endif %}
     <form class="navbar-form navbar-right" action="{{ path('search_articles') }}" role="search">

@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\Author;
+use AppBundle\Entity\User;
 use AppBundle\Entity\Tag;
 use AppBundle\Entity\Comment;
 use AppBundle\Form\Type\CommentType;
@@ -42,7 +42,10 @@ class BlogController extends Controller
 
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                [
+                    'articles' => $articles,
+                    'nextPageUrl' => $nextPageUrl
+                ]);
 
             return new Response($content);
         }
@@ -122,23 +125,23 @@ class BlogController extends Controller
      * @param Request $request
      * @param $slug
      * @return array
-     * @Route("/author/{slug}", name="show_author_articles")
+     * @Route("/author/{slug}", name="show_user_articles")
      * @Method("GET")
      * @Template("AppBundle:Blog:articlesList.html.twig")
      */
-    public function showAuthorArticlesAction(Request $request, $slug)
+    public function showUserArticlesAction(Request $request, $slug)
     {
         $currentPage = $request->query->getInt('page', 1);
 
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $articlesCount = $repository->findAllAuthorArticlesCount($slug);
+        $articlesCount = $repository->findAllUserArticlesCount($slug);
 
         $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findAllAuthorArticles($slug, $currentPage, $this->getParameter('articles_show_at_a_time'));
+        $articles = $repository->findAllUserArticles($slug, $currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
-            $nextPageUrl = $this->generateUrl('show_author_articles', ['slug' => $slug, 'page' => $nextPage]);
+            $nextPageUrl = $this->generateUrl('show_user_articles', ['slug' => $slug, 'page' => $nextPage]);
         } else {
             $nextPageUrl = false;
         }
@@ -150,12 +153,12 @@ class BlogController extends Controller
             return new Response($content);
         }
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Author');
-        $author = $repository->findOneBy(['slug' => $slug]);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $repository->findOneBy(['slug' => $slug]);
 
         return [
             'articles' => $articles,
-            'articles_description' => ['type' => 1, 'text' => $author ? $author->getName() : null],
+            'articles_description' => ['type' => 1, 'text' => $user ? $user->getUsername() : null],
             'nextPageUrl' => $nextPageUrl
         ];
     }

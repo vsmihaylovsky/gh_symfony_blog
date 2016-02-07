@@ -4,7 +4,7 @@
             <h1 class="panel-title">
                 <a href="{{ path('show_article', {'slug': article.0.slug}) }}">{{ article.0.header }}</a>
             </h1>
-            by <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
+            by <a href="{{ path('show_user_articles', {'slug': article.0.user.slug}) }}">{{ article.0.user.username }}</a>
                 <span class="glyphicon glyphicon-time" aria-hidden="true"
                       style="margin-left: 0.5ch"></span>
             {{ article.0.createdAt|date("d.m.Y H:i") }}

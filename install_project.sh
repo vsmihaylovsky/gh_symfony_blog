@@ -28,6 +28,7 @@ php app/console doctrine:schema:update --force
 
 3)
 php app/console h:d:f:l --no-interaction
+app/console create:blog:admin admin 1 admin@my.my
 ;;
 
 4)

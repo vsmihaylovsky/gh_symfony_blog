@@ -20,8 +20,8 @@ class ArticleRepository extends EntityRepository
     public function findArticleBySlug($slug)
     {
         return $this->createQueryBuilder('a')
-            ->select('a, author, t, c, avg(c1.rating) as comments_rating')
-            ->leftJoin('a.author', 'author')
+            ->select('a, user, t, c, avg(c1.rating) as comments_rating')
+            ->leftJoin('a.user', 'user')
             ->leftJoin('a.tags', 't')
             ->leftJoin('a.comments', 'c')
             ->leftJoin('a.comments', 'c1')
@@ -60,10 +60,10 @@ class ArticleRepository extends EntityRepository
      * @param $articlesShowAtATime
      * @return Article[] array
      */
-    public function findAllAuthorArticles($slug, $currentPage, $articlesShowAtATime)
+    public function findAllUserArticles($slug, $currentPage, $articlesShowAtATime)
     {
         $query = $this->getFindAllArticlesQuery()
-            ->where("author.slug = '$slug'")
+            ->where("user.slug = '$slug'")
             ->getQuery()
             ->setFirstResult($articlesShowAtATime * ($currentPage - 1))
             ->setMaxResults($articlesShowAtATime);
@@ -75,11 +75,11 @@ class ArticleRepository extends EntityRepository
      * @param $slug
      * @return mixed
      */
-    public function findAllAuthorArticlesCount($slug)
+    public function findAllUserArticlesCount($slug)
     {
         return $this->getFindAllArticlesCountQuery()
-            ->join('a.author', 'author')
-            ->where("author.slug = '$slug'")
+            ->join('a.user', 'user')
+            ->where("user.slug = '$slug'")
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -168,8 +168,8 @@ class ArticleRepository extends EntityRepository
     private function getFindAllArticlesQuery()
     {
         return $this->createQueryBuilder('a')
-            ->select('a, author, t, count(c.id) as comments_count, avg(c.rating) as comments_rating')
-            ->join('a.author', 'author')
+            ->select('a, user, t, count(c.id) as comments_count, avg(c.rating) as comments_rating')
+            ->join('a.user', 'user')
             ->leftJoin('a.tags', 't')
             ->leftJoin('a.comments', 'c')
             ->groupBy('a, t')

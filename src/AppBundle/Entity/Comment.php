@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="comment")
+ * @ORM\Table(name="comments")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\CommentRepository")
  */
 class Comment
@@ -34,9 +34,9 @@ class Comment
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=60)
      * @Assert\NotBlank()
-     * @Assert\Length(max = 50)
+     * @Assert\Length(max = 60)
      * @Assert\Email()
      */
     private $email;

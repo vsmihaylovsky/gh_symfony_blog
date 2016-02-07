@@ -3,7 +3,7 @@
 {% block content %}
     {% if articles_description is defined %}
         {% if articles_description.type == 1 %}
-            {% set description = 'Articles for author: ' ~ articles_description.text %}
+            {% set description = 'Articles for user: ' ~ articles_description.text %}
         {% elseif articles_description.type == 2 %}
             {% set description = 'Articles for tag: ' ~ articles_description.text %}
         {% elseif articles_description.type == 3 %}

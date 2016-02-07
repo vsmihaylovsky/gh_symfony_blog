@@ -1,7 +1,7 @@
 {% extends 'AppBundle:Blog:baseBlog.html.twig' %}
 {% block content %}
     <h1>{{ article.0.header }}</h1>
-    by <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
+    by <a href="{{ path('show_user_articles', {'slug': article.0.user.slug}) }}">{{ article.0.user.name }}</a>
     <span class="glyphicon glyphicon-time" aria-hidden="true" style="margin-left: 0.5ch"></span>
     {{ article.0.createdAt|date("d.m.Y H:i") }}
     <br>
