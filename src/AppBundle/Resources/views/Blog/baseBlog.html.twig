@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block navbar %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_MODERATOR') %}
         <div class="navbar-text navbar-left">
-            <a href="{{ path('administration_homepage') }}" class="navbar-link">Administration</a>
+            <a href="{{ path('new_article') }}" class="navbar-link">Create a new article</a>
         </div>
     {% endif %}
-    {% if is_granted('ROLE_USER') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <div class="navbar-text navbar-left">
-            <a href="{{ path('show_user_articles', {'slug': app.user.slug}) }}" class="navbar-link">{{ app.user.username }}</a>
+            <a href="{{ path('show_all_users') }}" class="navbar-link">Administration</a>
         </div>
     {% endif %}
     <form class="navbar-form navbar-right" action="{{ path('search_articles') }}" role="search">

@@ -3,3 +3,4 @@ AppBundle\Entity\User:
         username: <name()>
         password: $2y$13$E3Wm5GiKTYvt0oHMnfW4HetovIYELOl6QPEpwY1o1HO5OMTmeJmE6
         email: <email()>
+        roles: <(['ROLE_MODERATOR'])>

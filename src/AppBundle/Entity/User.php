@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="email", message="Email already taken")
  * @UniqueEntity(fields="username", message="Username already taken")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -75,6 +75,11 @@ class User implements UserInterface, \Serializable
     private $articles;
 
     /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
      * @Assert\NotBlank()
      * @Assert\Length(max = 4096)
      */
@@ -120,6 +125,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt,
         ));
@@ -134,6 +140,7 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->isActive,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
@@ -153,6 +160,26 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
     }
 
     /**
@@ -311,5 +338,39 @@ class User implements UserInterface, \Serializable
     public function getArticles()
     {
         return $this->articles;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

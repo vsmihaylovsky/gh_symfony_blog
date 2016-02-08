@@ -1,10 +1,20 @@
 {% for article in articles %}
     <div class="panel panel-default blog-article">
         <div class="panel-heading">
+            {% if is_granted('edit', article.0) %}
+                {{ form_start(delete_forms[article.0.id], {attr: {onsubmit: 'return confirm("Delete record?");', style: 'float: right' }}) }}
+                {{ form_widget(delete_forms[article.0.id].submit, {label: ' ', attr: {class: 'glyphicon glyphicon-trash btn-link' }}) }}
+                {{ form_end(delete_forms[article.0.id]) }}
+                <div style="float: right">
+                    <a class="glyphicon glyphicon-pencil"
+                       href="{{ path('edit_article', {'slug': article.0.slug}) }}"></a>
+                </div>
+            {% endif %}
             <h1 class="panel-title">
                 <a href="{{ path('show_article', {'slug': article.0.slug}) }}">{{ article.0.header }}</a>
             </h1>
-            by <a href="{{ path('show_user_articles', {'slug': article.0.user.slug}) }}">{{ article.0.user.username }}</a>
+            by
+            <a href="{{ path('show_user_articles', {'slug': article.0.user.slug}) }}">{{ article.0.user.username }}</a>
                 <span class="glyphicon glyphicon-time" aria-hidden="true"
                       style="margin-left: 0.5ch"></span>
             {{ article.0.createdAt|date("d.m.Y H:i") }}
@@ -16,7 +26,9 @@
         </div>
         <div class="panel-body">
             {% if article.0.imageName %}
-                <img class="img-responsive center-block" src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}" alt="image">
+                <img class="img-responsive center-block"
+                     src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}"
+                     alt="image">
                 <br>
             {% endif %}
             {{ article.0.content|raw }}
@@ -24,7 +36,8 @@
         <div class="panel-footer">
             <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
             {% for tag in article.0.tags %}
-                <a href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+                <a
+                href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
             {% endfor %}
         </div>
     </div>

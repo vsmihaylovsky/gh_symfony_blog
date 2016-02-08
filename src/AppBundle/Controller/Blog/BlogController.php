@@ -9,9 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Tag;
-use AppBundle\Entity\Comment;
-use AppBundle\Form\Type\CommentType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends Controller
@@ -40,11 +37,14 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
                 [
                     'articles' => $articles,
-                    'nextPageUrl' => $nextPageUrl
+                    'nextPageUrl' => $nextPageUrl,
+                    'delete_forms' => $delete_forms
                 ]);
 
             return new Response($content);
@@ -52,72 +52,8 @@ class BlogController extends Controller
 
         return [
             'articles' => $articles,
-            'nextPageUrl' => $nextPageUrl
-        ];
-    }
-
-    /**
-     * @param $slug
-     * @return array
-     * @Route("/article/{slug}", name="show_article")
-     * @Method("GET")
-     * @Template("AppBundle:Blog:article.html.twig")
-     */
-    public function showArticleAction($slug)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $article = $repository->findArticleBySlug($slug);
-
-        if (!$article) {
-            return $this->redirectToRoute('homepage');
-        }
-
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment, [
-            'action' => $this->generateUrl('add_comment', ['slug' => $slug]),
-            'method' => 'POST',
-        ])
-            ->add('save', SubmitType::class, ['label' => 'Add comment']);
-
-        return [
-            'article' => $article,
-            'form' => $form->createView()
-        ];
-    }
-
-    /**
-     * @param Request $request
-     * @param $slug
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Route("/article/{slug}", name="add_comment")
-     * @Method("POST")
-     * @Template("AppBundle:Blog:article.html.twig")
-     */
-    public function addCommentAction(Request $request, $slug)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $article = $repository->findArticleBySlug($slug);
-
-        $comment = new Comment();
-        $comment->setArticle($article[0]);
-
-        $form = $this->createForm(CommentType::class, $comment, [
-            'action' => $this->generateUrl('add_comment', ['slug' => $slug]),
-            'method' => 'POST',
-        ])
-            ->add('save', SubmitType::class, ['label' => 'Add comment']);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('show_article', ['slug' => $comment->getArticle()->getSlug()]));
-        }
-
-        return [
-            'article' => $article,
-            'form' => $form->createView(),
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 
@@ -146,9 +82,11 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl, 'delete_forms' => $delete_forms]);
 
             return new Response($content);
         }
@@ -159,7 +97,8 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 1, 'text' => $user ? $user->getUsername() : null],
-            'nextPageUrl' => $nextPageUrl
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 
@@ -188,9 +127,11 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl, 'delete_forms' => $delete_forms]);
 
             return new Response($content);
         }
@@ -201,7 +142,8 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 2, 'text' => $tag ? $tag->getName() : null],
-            'nextPageUrl' => $nextPageUrl
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 
@@ -230,9 +172,11 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl, 'delete_forms' => $delete_forms]);
 
             return new Response($content);
         }
@@ -240,7 +184,8 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 3, 'text' => $search_string],
-            'nextPageUrl' => $nextPageUrl
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 }

@@ -22,14 +22,6 @@ class ArticleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', EntityType::class, [
-                'class' => 'AppBundle\Entity\User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('a')
-                        ->orderBy('a.username', 'ASC');
-                },
-                'choice_label' => 'username'
-            ])
             ->add('header', TextType::class)
             ->add('imageFile', FileType::class, ['required' => false])
             ->add('content', TextareaType::class,

@@ -27,5 +27,23 @@
             <argument>%most.popular.articles.count%</argument>
             <argument>%latest.comments.count%</argument>
         </service>
+
+        <service id="app.comment_voter"
+                 class="AppBundle\Security\CommentVoter"
+                 public="false"
+        >
+            <argument type="service" id="security.access.decision_manager"/>
+
+            <tag name="security.voter"/>
+        </service>
+
+        <service id="app.article"
+                 class="AppBundle\Security\ArticleVoter"
+                 public="false"
+        >
+            <argument type="service" id="security.access.decision_manager"/>
+
+            <tag name="security.voter"/>
+        </service>
     </services>
 </container>

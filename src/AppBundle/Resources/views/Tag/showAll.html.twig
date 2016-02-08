@@ -1,0 +1,32 @@
+{% extends 'AppBundle:Administration:baseAdministration.html.twig' %}
+
+{% block content %}
+    <a class="btn btn-primary" href="{{ path('new_tag') }}">Add a new tag</a>
+    <table class="table table-bordered table-striped table-hover table-condensed">
+        <caption>Tags</caption>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags %}
+            <tr>
+                <td>
+                    {{ tag.name }}
+                </td>
+                <td>
+                    <a class="glyphicon glyphicon-pencil" href="{{ path('edit_tag', {'slug': tag.slug}) }}"></a>
+                </td>
+                <td>
+                    {{ form_start(delete_forms[tag.id], {attr: {onsubmit: 'return confirm("Delete record?");' }}) }}
+                    {{ form_widget(delete_forms[tag.id].submit, {label: ' ', attr: {class: 'glyphicon glyphicon-trash btn-link' }}) }}
+                    {{ form_end(delete_forms[tag.id]) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
