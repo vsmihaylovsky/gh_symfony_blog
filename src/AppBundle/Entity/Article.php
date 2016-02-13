@@ -17,7 +17,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="article")
+ * @ORM\Table(name="articles")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ArticleRepository")
  * @Vich\Uploadable
  */
@@ -82,10 +82,10 @@ class Article
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Author", inversedBy="articles")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="articles")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $author;
+    private $user;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="articles")
@@ -278,27 +278,27 @@ class Article
     }
 
     /**
-     * Set author
+     * Set user
      *
-     * @param \AppBundle\Entity\Author $author
+     * @param \AppBundle\Entity\User $user
      *
      * @return Article
      */
-    public function setAuthor(\AppBundle\Entity\Author $author = null)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->author = $author;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get author
+     * Get user
      *
-     * @return \AppBundle\Entity\Author
+     * @return \AppBundle\Entity\User
      */
-    public function getAuthor()
+    public function getUser()
     {
-        return $this->author;
+        return $this->user;
     }
 
     /**

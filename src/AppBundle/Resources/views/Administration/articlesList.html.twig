@@ -3,7 +3,7 @@
 {% block content %}
     {% if articles_description is defined %}
         {% if articles_description.type == 1 %}
-            {% set description = 'Articles for author: ' ~ articles_description.text %}
+            {% set description = 'Articles for user: ' ~ articles_description.text %}
         {% elseif articles_description.type == 2 %}
             {% set description = 'Articles for tag: ' ~ articles_description.text %}
         {% elseif articles_description.type == 3 %}
@@ -15,8 +15,6 @@
         <h1>{{ description }}</h1>
         <hr>
     {% endif %}
-
-    <a class="btn btn-primary" href="{{ path('new_article') }}" style="margin-bottom: 10px">Create a new article</a>
 
     {% include 'AppBundle:Administration:articlesForList.html.twig' %}
 {% endblock %}

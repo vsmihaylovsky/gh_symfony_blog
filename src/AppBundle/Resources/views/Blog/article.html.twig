@@ -1,7 +1,7 @@
 {% extends 'AppBundle:Blog:baseBlog.html.twig' %}
 {% block content %}
     <h1>{{ article.0.header }}</h1>
-    by <a href="{{ path('show_author_articles', {'slug': article.0.author.slug}) }}">{{ article.0.author.name }}</a>
+    by <a href="{{ path('show_user_articles', {'slug': article.0.user.slug}) }}">{{ article.0.user.username }}</a>
     <span class="glyphicon glyphicon-time" aria-hidden="true" style="margin-left: 0.5ch"></span>
     {{ article.0.createdAt|date("d.m.Y H:i") }}
     <br>
@@ -10,7 +10,8 @@
     </div>
     <hr>
     {% if article.0.imageName %}
-        <img class="img-responsive center-block" src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}" alt="image">
+        <img class="img-responsive center-block"
+             src="{{ vich_uploader_asset(article.0, 'imageFile') | imagine_filter('article_image') }}" alt="image">
         <br>
     {% endif %}
     {{ article.0.content|raw }}
@@ -22,20 +23,32 @@
     {% endfor %}
     <hr>
     <h1>Comments:</h1>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
-            {{ tinymce_init({
-                theme: {'simple':{'height': 200, plugins: ['link code'],}},
-                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"})
-            }}
-            {{ form(form) }}
+    {% if is_granted('ROLE_USER') %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+                {{ tinymce_init({
+                    theme: {'simple':{'height': 200, plugins: ['link code'],}},
+                    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"}) }}
+                {{ form(form) }}
+            </div>
         </div>
-    </div>
+    {% endif %}
     {% for comment in article.0.comments %}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h1 class="panel-title">{{ comment.name }}</h1>
+                {% if is_granted('edit', comment) %}
+                    {{ form_start(delete_comment_forms[comment.id], {attr: {onsubmit: 'return confirm("Delete record?");', style: 'float: right' }}) }}
+                    {{ form_widget(delete_comment_forms[comment.id].submit, {label: ' ', attr: {class: 'glyphicon glyphicon-trash btn-link' }}) }}
+                    {{ form_end(delete_comment_forms[comment.id]) }}
+                    <div style="float: right">
+                        <a class="glyphicon glyphicon-pencil"
+                           href="{{ path('edit_comment', {'id': comment.id}) }}"></a>
+                    </div>
+                {% endif %}
+                <h1 class="panel-title">
+                    <a href="{{ path('show_user_articles', {'slug': comment.user.slug}) }}">{{ comment.user.username }}</a>
+                </h1>
                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
                 {{ comment.createdAt|date("d.m.Y h:i") }}
                 <div class="rating-container rating-gly-star" data-content="">
@@ -53,6 +66,6 @@
     {{ parent() }}
 
     <script type="text/javascript">
-//        $("#comment_rating").rating({min:0, max:5, step:1});
+        //        $("#comment_rating").rating({min:0, max:5, step:1});
     </script>
 {% endblock %}

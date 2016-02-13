@@ -1,7 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block navbar %}
-    <div class="navbar-text navbar-right"><a href="{{ path('administration_homepage') }}" class="navbar-link">Administration</a></div>
+    {% if is_granted('ROLE_MODERATOR') %}
+        <div class="navbar-text navbar-left">
+            <a href="{{ path('new_article') }}" class="navbar-link">Create a new article</a>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="navbar-text navbar-left">
+            <a href="{{ path('show_all_users') }}" class="navbar-link">Administration</a>
+        </div>
+    {% endif %}
     <form class="navbar-form navbar-right" action="{{ path('search_articles') }}" role="search">
         <div class="form-group">
             <input type="text" class="form-control" name="q" placeholder="Search">
@@ -24,7 +33,8 @@
                 </div>
                 <div class="panel-body">
                     {% for tag in tagsCloud() %}
-                        <a href="{{ path('show_tag_articles', {'slug': tag.0.slug}) }}" style="font-size: {{ tag.tag_weight }}%">{{ tag.0.name }}</a>{% if not loop.last %}, {% endif %}
+                        <a href="{{ path('show_tag_articles', {'slug': tag.0.slug}) }}"
+                           style="font-size: {{ tag.tag_weight }}%">{{ tag.0.name }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 </div>
             </div>

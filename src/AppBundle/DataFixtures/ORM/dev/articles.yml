@@ -1,6 +1,6 @@
 AppBundle\Entity\Article:
     article_{1..30}:
-        author: "@author_*"
+        user: "@user_*"
         header: <text(100)>
         ImageName: <(basename($fake('image', null, './web/images/articles', 1000, 700)))>
         content: <text(3000)>

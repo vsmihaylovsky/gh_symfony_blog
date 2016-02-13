@@ -42,6 +42,10 @@ class AppExtension extends Twig_Extension
         $repository = $this->doctrine->getRepository('AppBundle:Tag');
         $tagsCloud = $repository->getTagCloud();
 
+        if (!$tagsCloud) {
+            return null;
+        }
+
         $tag_weights = array_map(function ($tag) {
             return $tag['articles_count'];
         }, $tagsCloud);

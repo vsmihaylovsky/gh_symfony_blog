@@ -1,0 +1,45 @@
+{% extends 'AppBundle:Administration:baseAdministration.html.twig' %}
+
+{% block content %}
+    <table class="table table-bordered table-striped table-hover table-condensed">
+        <caption>Users</caption>
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Moderator</th>
+            <th>Active</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {{ user.username }}
+                </td>
+                <td>
+                    {{ user.email }}
+                </td>
+                <td>
+                    {% if 'ROLE_ADMIN' in user.roles %}
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                    {% elseif 'ROLE_MODERATOR' in user.roles %}
+                        <a class="glyphicon glyphicon-check" href="{{ path('set_user_role', {'slug': user.slug}) }}"></a>
+                    {% else %}
+                        <a class="glyphicon glyphicon-unchecked" href="{{ path('set_moderator_role', {'slug': user.slug}) }}"></a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if 'ROLE_ADMIN' in user.roles %}
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                    {% elseif user.isActive %}
+                        <a class="glyphicon glyphicon-check" href="{{ path('switch_active', {'slug': user.slug}) }}"></a>
+                    {% else %}
+                        <a class="glyphicon glyphicon-unchecked" href="{{ path('switch_active', {'slug': user.slug}) }}"></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

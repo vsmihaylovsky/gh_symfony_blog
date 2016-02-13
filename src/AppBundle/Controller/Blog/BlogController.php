@@ -7,11 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\Author;
+use AppBundle\Entity\User;
 use AppBundle\Entity\Tag;
-use AppBundle\Entity\Comment;
-use AppBundle\Form\Type\CommentType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends Controller
@@ -40,77 +37,23 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                [
+                    'articles' => $articles,
+                    'nextPageUrl' => $nextPageUrl,
+                    'delete_forms' => $delete_forms
+                ]);
 
             return new Response($content);
         }
 
         return [
             'articles' => $articles,
-            'nextPageUrl' => $nextPageUrl
-        ];
-    }
-
-    /**
-     * @param $slug
-     * @return array
-     * @Route("/{slug}", name="show_article")
-     * @Method("GET")
-     * @Template("AppBundle:Blog:article.html.twig")
-     */
-    public function showArticleAction($slug)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $article = $repository->findArticleBySlug($slug);
-
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment, [
-            'action' => $this->generateUrl('add_comment', ['slug' => $slug]),
-            'method' => 'POST',
-        ])
-            ->add('save', SubmitType::class, ['label' => 'Add comment']);
-
-        return [
-            'article' => $article,
-            'form' => $form->createView()
-        ];
-    }
-
-    /**
-     * @param Request $request
-     * @param $slug
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Route("/{slug}", name="add_comment")
-     * @Method("POST")
-     * @Template("AppBundle:Blog:article.html.twig")
-     */
-    public function addCommentAction(Request $request, $slug)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $article = $repository->findArticleBySlug($slug);
-
-        $comment = new Comment();
-        $comment->setArticle($article[0]);
-
-        $form = $this->createForm(CommentType::class, $comment, [
-            'action' => $this->generateUrl('add_comment', ['slug' => $slug]),
-            'method' => 'POST',
-        ])
-            ->add('save', SubmitType::class, ['label' => 'Add comment']);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('show_article', ['slug' => $comment->getArticle()->getSlug()]));
-        }
-
-        return [
-            'article' => $article,
-            'form' => $form->createView(),
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 
@@ -118,41 +61,44 @@ class BlogController extends Controller
      * @param Request $request
      * @param $slug
      * @return array
-     * @Route("/author/{slug}", name="show_author_articles")
+     * @Route("/author/{slug}", name="show_user_articles")
      * @Method("GET")
      * @Template("AppBundle:Blog:articlesList.html.twig")
      */
-    public function showAuthorArticlesAction(Request $request, $slug)
+    public function showUserArticlesAction(Request $request, $slug)
     {
         $currentPage = $request->query->getInt('page', 1);
 
         $repository = $this->getDoctrine()->getRepository('AppBundle:Article');
-        $articlesCount = $repository->findAllAuthorArticlesCount($slug);
+        $articlesCount = $repository->findAllUserArticlesCount($slug);
 
         $nextPage = $this->get('app.pagination_service')->getNextPageNumber($articlesCount, $currentPage);
 
-        $articles = $repository->findAllAuthorArticles($slug, $currentPage, $this->getParameter('articles_show_at_a_time'));
+        $articles = $repository->findAllUserArticles($slug, $currentPage, $this->getParameter('articles_show_at_a_time'));
 
         if ($nextPage) {
-            $nextPageUrl = $this->generateUrl('show_author_articles', ['slug' => $slug, 'page' => $nextPage]);
+            $nextPageUrl = $this->generateUrl('show_user_articles', ['slug' => $slug, 'page' => $nextPage]);
         } else {
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl, 'delete_forms' => $delete_forms]);
 
             return new Response($content);
         }
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Author');
-        $author = $repository->findOneBy(['slug' => $slug]);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $repository->findOneBy(['slug' => $slug]);
 
         return [
             'articles' => $articles,
-            'articles_description' => ['type' => 1, 'text' => $author->getName()],
-            'nextPageUrl' => $nextPageUrl
+            'articles_description' => ['type' => 1, 'text' => $user ? $user->getUsername() : null],
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 
@@ -181,9 +127,11 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl, 'delete_forms' => $delete_forms]);
 
             return new Response($content);
         }
@@ -193,8 +141,9 @@ class BlogController extends Controller
 
         return [
             'articles' => $articles,
-            'articles_description' => ['type' => 2, 'text' => $tag->getName()],
-            'nextPageUrl' => $nextPageUrl
+            'articles_description' => ['type' => 2, 'text' => $tag ? $tag->getName() : null],
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 
@@ -223,9 +172,11 @@ class BlogController extends Controller
             $nextPageUrl = false;
         }
 
+        $delete_forms = $this->get('app.delete_form_service')->getArticlesDeleteForms($articles);
+
         if ($request->isXmlHttpRequest()) {
             $content = $this->renderView('AppBundle:Blog:articlesForList.html.twig',
-                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl]);
+                ['articles' => $articles, 'nextPageUrl' => $nextPageUrl, 'delete_forms' => $delete_forms]);
 
             return new Response($content);
         }
@@ -233,7 +184,8 @@ class BlogController extends Controller
         return [
             'articles' => $articles,
             'articles_description' => ['type' => 3, 'text' => $search_string],
-            'nextPageUrl' => $nextPageUrl
+            'nextPageUrl' => $nextPageUrl,
+            'delete_forms' => $delete_forms
         ];
     }
 }
