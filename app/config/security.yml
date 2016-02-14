@@ -21,17 +21,17 @@ security:
             provider: db_provider
 
             form_login:
-                login_path: /login
-                check_path: /login_check
+                login_path: login
+                check_path: login
                 csrf_token_generator: security.csrf.token_manager
 
             logout:
-                path:   /logout
-                target: /
+                path:   logout
+                target: homepage
 
             remember_me:
                 secret:   '%secret%'
-                path:     /
+                path:     homepage
 
     access_control:
         # require ROLE_ADMIN for /admin*

@@ -11,7 +11,7 @@
                 </div>
             {% endif %}
 
-            <form action="{{ path('login_check') }}" method="post">
+            <form action="{{ path('login') }}" method="post">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="_username" class="form-control" value="{{ last_username }}"
@@ -34,6 +34,8 @@
                     is redirected to on success (more details below)
                     <input type="hidden" name="_target_path" value="/account" />
                 #}
+
+                <input type="hidden" name="_target_path" value="{{ url('homepage') }}" />
 
                 <input type="hidden" name="_csrf_token"
                        value="{{ csrf_token('authenticate') }}"
