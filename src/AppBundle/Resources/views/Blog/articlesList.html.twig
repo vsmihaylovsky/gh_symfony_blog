@@ -3,11 +3,11 @@
 {% block content %}
     {% if articles_description is defined %}
         {% if articles_description.type == 1 %}
-            {% set description = 'Articles for author: ' ~ articles_description.text %}
+            {% set description = 'Articles for author' | trans ~ ': ' ~ articles_description.text %}
         {% elseif articles_description.type == 2 %}
-            {% set description = 'Articles for tag: ' ~ articles_description.text %}
+            {% set description = 'Articles for tag' | trans ~ ': ' ~ articles_description.text %}
         {% elseif articles_description.type == 3 %}
-            {% set description = 'Search for text in article title: ' ~ articles_description.text %}
+            {% set description = 'Search for text in article title' | trans ~ ': ' ~ articles_description.text %}
         {% else %}
             {% set description = articles_description.text %}
         {% endif %}

@@ -7,7 +7,7 @@
     <ul class="nav navbar-nav">
         {% for item in navigation_bar %}
             <li {% if item[0] == active_route %}class="active"{% endif %}>
-                <a href="{{ path(item[0]) }}">{{ item[1] }}</a>
+                <a href="{{ path(item[0]) }}">{{ item[1] | trans }}</a>
             </li>
         {% endfor %}
 

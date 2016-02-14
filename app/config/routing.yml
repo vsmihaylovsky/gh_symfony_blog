@@ -1,3 +1,10 @@
+default:
+    path:     /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: homepage
+        permanent: true
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
