@@ -13,7 +13,7 @@
             <h1 class="panel-title">
                 <a href="{{ path('show_article', {'slug': article.0.slug}) }}">{{ article.0.header }}</a>
             </h1>
-            by
+            {{ 'author' | trans }}
             <a href="{{ path('show_user_articles', {'slug': article.0.user.slug}) }}">{{ article.0.user.username }}</a>
                 <span class="glyphicon glyphicon-time" aria-hidden="true"
                       style="margin-left: 0.5ch"></span>

@@ -1,6 +1,18 @@
+default:
+    path:     /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: homepage
+        permanent: true
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+    prefix:   /{_locale}
+    requirements:
+       _locale: %app.locales%
+    defaults:
+        _locale: %locale%
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"

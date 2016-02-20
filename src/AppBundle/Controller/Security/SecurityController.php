@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class SecurityController extends Controller
 {
     /**
-     * @Route("/login", name="login_route")
+     * @Route("/login", name="login")
      * @Template("AppBundle:Security:login.html.twig")
      */
     public function loginAction()
@@ -29,18 +29,9 @@ class SecurityController extends Controller
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return [
-                // last username entered by the user
-                'last_username' => $lastUsername,
-                'error'         => $error,
-            ];
-    }
-
-    /**
-     * @Route("/login_check", name="login_check")
-     */
-    public function loginCheckAction()
-    {
-        // this controller will not be executed,
-        // as the route is handled by the Security system
+            // last username entered by the user
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ];
     }
 }

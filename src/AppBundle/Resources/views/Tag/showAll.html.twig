@@ -1,14 +1,14 @@
 {% extends 'AppBundle:Administration:baseAdministration.html.twig' %}
 
 {% block content %}
-    <a class="btn btn-primary" href="{{ path('new_tag') }}">Add a new tag</a>
+    <a class="btn btn-primary" href="{{ path('new_tag') }}">{{ 'Add a new tag' | trans }}</a>
     <table class="table table-bordered table-striped table-hover table-condensed">
-        <caption>Tags</caption>
+        <caption>{{ 'Tags' | trans }}</caption>
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>{{ 'Name' | trans }}</th>
+            <th>{{ 'Edit' | trans }}</th>
+            <th>{{ 'Delete' | trans }}</th>
         </tr>
         </thead>
         <tbody>

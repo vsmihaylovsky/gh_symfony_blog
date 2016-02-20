@@ -22,7 +22,7 @@
         href="{{ path('show_tag_articles', {'slug': tag.slug}) }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
     {% endfor %}
     <hr>
-    <h1>Comments:</h1>
+    <h1>{{ 'Comments' | trans }}:</h1>
     {% if is_granted('ROLE_USER') %}
         <div class="panel panel-default">
             <div class="panel-body">
@@ -61,11 +61,4 @@
             </div>
         </div>
     {% endfor %}
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-
-    <script type="text/javascript">
-        //        $("#comment_rating").rating({min:0, max:5, step:1});
-    </script>
 {% endblock %}

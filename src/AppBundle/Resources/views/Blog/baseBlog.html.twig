@@ -1,19 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block navbar %}
+    {% if is_granted('ROLE_MODERATOR') or is_granted('ROLE_ADMIN') %}
+    <ul class="nav navbar-nav">
+    {% endif %}
     {% if is_granted('ROLE_MODERATOR') %}
-        <div class="navbar-text navbar-left">
-            <a href="{{ path('new_article') }}" class="navbar-link">Create a new article</a>
-        </div>
+        <li>
+            <a href="{{ path('new_article') }}" class="navbar-link">{{ 'Create a new article' | trans }}</a>
+        </li>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <div class="navbar-text navbar-left">
-            <a href="{{ path('show_all_users') }}" class="navbar-link">Administration</a>
-        </div>
+        <li>
+            <a href="{{ path('show_all_users') }}" class="navbar-link">{{ 'Administration' | trans }}</a>
+        </li>
     {% endif %}
+    {% if is_granted('ROLE_MODERATOR') or is_granted('ROLE_ADMIN') %}
+    </ul>
+    {% endif %}
+
     <form class="navbar-form navbar-right" action="{{ path('search_articles') }}" role="search">
         <div class="form-group">
-            <input type="text" class="form-control" name="q" placeholder="Search">
+            <input type="text" class="form-control" name="q" placeholder="{{ 'Search' | trans }}">
         </div>
         <button type="submit" class="btn btn-default">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -29,7 +36,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Tag cloud</h1>
+                    <h1 class="panel-title">{{ 'Tag cloud' | trans }}</h1>
                 </div>
                 <div class="panel-body">
                     {% for tag in tagsCloud() %}
@@ -40,7 +47,7 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Most popular articles</h1>
+                    <h1 class="panel-title">{{ 'Most popular articles' | trans }}</h1>
                 </div>
                 <ul class="list-group">
                     {% for most_popular_article in mostPopularArticles() %}
@@ -52,7 +59,7 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">Latest comments</h1>
+                    <h1 class="panel-title">{{ 'Latest comments' | trans }}</h1>
                 </div>
                 <ul class="list-group">
                     {% for latest_comment in latestComments() %}
