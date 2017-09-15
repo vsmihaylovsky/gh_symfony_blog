@@ -89,6 +89,7 @@ class User implements AdvancedUserInterface, \Serializable
     {
         $this->isActive = true;
         $this->articles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
         $this->roles = ['ROLE_USER'];
     }
 
